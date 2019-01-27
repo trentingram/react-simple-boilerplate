@@ -38,6 +38,10 @@ body {
   flex: 2;
 }
 
+.messages ul {
+  list-style: none;
+}
+
 .message {
   display: flex;
   padding: 5px;
@@ -86,4 +90,5 @@ body {
   padding: 0 10px;
   text-decoration: none;
 }
+
 
