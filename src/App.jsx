@@ -71,7 +71,13 @@ class App extends Component {
     }
 
     componentDidMount() {
-      console.log("componentDidMount <App />");
+
+      // establish Websocket Connection
+      let socket = new WebSocket('ws://localhost:3001')
+      socket.onopen = () => {
+      console.log('Connected to server.');
+      }
+      
       setTimeout(() => {
         console.log("Simulating incoming message");
         // Add a new message to the list of messages in the data store
