@@ -1,11 +1,19 @@
 import React, {Component} from 'react';
 
-function ChatBar({user}) {
+function ChatBar({user, addMessage}) {
+
+const handleEnter = (e) => {
+  if(e.keyCode === 13) {
+    const newText = e.target.value
+    addMessage(newText)
+    e.target.value = "";
+  }
+}
 
   return (
-    <footer className="chatbar">
+    <footer  className="chatbar">
       <input className="chatbar-username" value={user} placeholder="Your Name (Optional)" />
-      <input className="chatbar-message" placeholder="Type a message and hit ENTER" />
+      <input  type="text" onKeyDown={handleEnter} className="chatbar-message" name="newMessage" placeholder="Type a message and hit ENTER" />
     </footer>
   )
 } 
@@ -13,7 +21,8 @@ function ChatBar({user}) {
 function MessageList({messages}) {
   
   const allMessages = messages.map((info, index) => {
-    return (<Messages key={index} messageInfo={info}/>)
+    
+    return (<Message key={info.id} messageInfo={info}/>)
   })
   return (
     <main className="messages">
@@ -22,7 +31,7 @@ function MessageList({messages}) {
   )
 }
 
-function Messages({messageInfo}) {
+function Message({messageInfo}) {
 
   return (
     <li>
@@ -39,23 +48,50 @@ function Messages({messageInfo}) {
 
 class App extends Component {
 
-  constructor(props){
-    super(props)
-      this.state = {
+    state = {
 
-        currentUser: {
-          name: "Bob"
+      currentUser: {
+        name: "Bob"
+      },
+      messages: [{
+          username: "Bob",
+          content: "Has anyone seen my marbles?",
+          id: 1
         },
-        messages: [{
-            username: "Bob",
-            content: "Has anyone seen my marbles?",
-          },
-          {
-            username: "Anonymous",
-            content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-          }
-        ]
+        {
+          username: "Anonymous",
+          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good.",
+          id: 2
+        }
+      ]
       }
+
+    componentDidMount() {
+      console.log("componentDidMount <App />");
+      setTimeout(() => {
+        console.log("Simulating incoming message");
+        // Add a new message to the list of messages in the data store
+        const newMessage = {id: randomNumber(), username: "Michelle", content: "Hello there!"};
+        const messages = this.state.messages.concat(newMessage)
+        // Update the state of the app component.
+        // Calling setState will trigger a call to render() in App and all child components.
+        this.setState({messages: messages})
+      }, 3000);
+    }
+    
+    addMessage = (text) => {
+      function randomNumber() {
+        Math.floor((Math.random() * 100) + 1);
+      }
+
+      const newMessage = {
+        username: this.state.currentUser.name, 
+        content: text,
+        id: randomNumber()
+      };
+      const messages = this.state.messages.concat(newMessage)
+      this.setState({messages: messages})
+      
     }
 
     render() {
@@ -66,7 +102,7 @@ class App extends Component {
             <a href="/" className="navbar-brand">Chatty</a>
           </nav>
           <MessageList messages={this.state.messages}/>
-          <ChatBar user={this.state.currentUser.name} />
+          <ChatBar user={this.state.currentUser.name} addMessage={this.addMessage} />
         </div>
       );
     }
