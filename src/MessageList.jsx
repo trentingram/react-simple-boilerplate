@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Message from './Message.jsx';
 
 const MessageList = ({messages}) => {
   

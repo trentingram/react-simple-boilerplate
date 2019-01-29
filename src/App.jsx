@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
+import MessageList from './MessageList.jsx';
+
 
 class App extends Component {
 
