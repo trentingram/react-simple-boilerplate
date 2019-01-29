@@ -8,7 +8,11 @@ class App extends Component {
     socket = new WebSocket("ws://localhost:3001");
 
     state = {
-      
+
+      userNumber: 1,
+      userText: function() {
+      return `${this.userNumber} user` + (this.userNumber > 1 ? "s" : "") + " online..."
+      },
       currentUser: {
         name: "Anonymous"
       },
@@ -73,6 +77,7 @@ class App extends Component {
         <div>
           <nav className="navbar">
             <a href="/" className="navbar-brand">Chatty</a>
+            <div className="navbar-users">{this.state.userText()}</div>
           </nav>
           <MessageList messages={this.state.messages}/>
           <ChatBar user={this.state.currentUser.name} addMessage={this.addMessage} updateUsername={this.updateUsername} />
