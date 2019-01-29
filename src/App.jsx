@@ -77,18 +77,18 @@ class App extends Component {
     if(parsedPayload.type === 'incomingNotice') {
       let concatMessage = this.state.messages.concat(parsedPayload)
       this.setState({
-        currentUser: { name: parsedPayload.username } ,
         messages: concatMessage
       })
     }
   }
 
   updateUsername = (username) => {
-    
+    let oldName = this.state.currentUser.name;
+    this.setState({currentUser: { name: username }})
     let newNotice = {
       type: 'postNotice',
       username: username,
-      content: username + " just updated their name."
+      content: `${oldName} just updated their name to ${username}.`
     }
     this.socket.send(JSON.stringify(newNotice))
   }
