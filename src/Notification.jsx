@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 
-const Notification = () => {
+const Notification = ({text}) => {
 
     return (
         <div className="message system">
-          Anonymrous1 cddhanged their name to nomnom.
+          {text}
         </div>
     )
   }
