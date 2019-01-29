@@ -51,6 +51,7 @@ class App extends Component {
   addMessage = (text, user) => {
     
     const newMessage = {
+      type: 'message',
       username: user,
       content: text
     };
@@ -58,18 +59,23 @@ class App extends Component {
     this.socket.send(JSON.stringify(newMessage))
   }
 
-  onMessage = (message) => {
+  onMessage = (payload) => {
+    let parsedPayload = JSON.parse(payload.data)
+    console.log(parsedPayload.type)
+    if(parsedPayload.type === 'message'){
+      let newState = this.state.messages.concat(parsedPayload)
+      this.setState({messages: newState})
+    }
 
-    let messageToAdd = JSON.parse(message.data)
-    let allMessages = this.state.messages.concat(messageToAdd)
-    this.setState({messages: allMessages})
+    if(parsedPayload.type === 'client'){
+      console.log('update usernumber on state.')
+    }
+
   }
 
   updateUsername = (username) => {
-    console.log('ready to update state with: ', typeof username)
     let newUsernameState = { name: username }
     this.setState({currentUser: newUsernameState})
-    console.log(this.state)
   }
 
   render() {
