@@ -17,41 +17,42 @@ class App extends Component {
       name: "Anonymous"
     },
     messages: [
-      {
-        username: "Bob",
-        content: "Has anyone seen my marbles?",
-        id: 1
-      },
-      {
-        username: "Anonymous",
-        content: "No, I think you lost them. You lost your marbles Bob. You lost them for good.",
-        id: 2
-      }
+      // {
+      //   type: 'incomingMessage',
+      //   username: "Bob",
+      //   content: "Has anyone seen my marbles?",
+      //   id: 1
+      // },
+      // { 
+      //   type: 'incomingNotice',
+      //   username: "Anonymous",
+      //   content: "No, I think you lost them. You lost your marbles Bob. You lost them for good.",
+      //   id: 2
+      // }
      ]
     }
 
   componentDidMount() {
     this.socket.onmessage = this.onMessage;
-    // once connected, console.log
     this.socket.onopen = () => {
     console.log('Connected to server.');
     }
     
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const newMessage = {id: 25, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
-    }, 3000);
+    // setTimeout(() => {
+    //   console.log("Simulating incoming message");
+    //   // Add a new message to the list of messages in the data store
+    //   const newMessage = {type: 'message', id: 25, username: "Michelle", content: "Hello there!"};
+    //   const messages = this.state.messages.concat(newMessage)
+    //   // Update the state of the app component.
+    //   // Calling setState will trigger a call to render() in App and all child components.
+    //   this.setState({messages: messages})
+    // }, 3000);
   }
 
   addMessage = (text, user) => {
     
     const newMessage = {
-      type: 'message',
+      type: 'postMessage',
       username: user,
       content: text
     };
@@ -63,19 +64,33 @@ class App extends Component {
 
     let parsedPayload = JSON.parse(payload.data)
     
-    if(parsedPayload.type === 'message'){
-      let newState = this.state.messages.concat(parsedPayload)
-      this.setState({messages: newState})
-    }
+    if(parsedPayload.type === 'incomingMessage'){
+      
+      let concatMessage = this.state.messages.concat(parsedPayload)
+      this.setState({messages: concatMessage})
+    } else
 
     if(parsedPayload.type === 'client'){
       this.setState({userNumber: parsedPayload.clients})
+    } else
+
+    if(parsedPayload.type === 'incomingNotice') {
+      let concatMessage = this.state.messages.concat(parsedPayload)
+      this.setState({
+        currentUser: { name: parsedPayload.username } ,
+        messages: concatMessage
+      })
     }
   }
 
   updateUsername = (username) => {
-    let newUsernameState = { name: username }
-    this.setState({currentUser: newUsernameState})
+    
+    let newNotice = {
+      type: 'postNotice',
+      username: username,
+      content: username + " just updated their name."
+    }
+    this.socket.send(JSON.stringify(newNotice))
   }
 
   render() {
