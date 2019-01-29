@@ -60,17 +60,17 @@ class App extends Component {
   }
 
   onMessage = (payload) => {
+
     let parsedPayload = JSON.parse(payload.data)
-    console.log(parsedPayload.type)
+    
     if(parsedPayload.type === 'message'){
       let newState = this.state.messages.concat(parsedPayload)
       this.setState({messages: newState})
     }
 
     if(parsedPayload.type === 'client'){
-      console.log('update usernumber on state.')
+      this.setState({userNumber: parsedPayload.clients})
     }
-
   }
 
   updateUsername = (username) => {
