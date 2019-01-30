@@ -8,10 +8,10 @@ const MessageList = ({messages}) => {
 
       console.log(info.type)
       if(info.type === 'incomingMessage') {
-        return  (<Message key={info.id} messageInfo={info} />)
+        return  (<Message key={info.uuid} messageInfo={info} />)
       } else
       if(info.type === 'incomingNotice') {
-        return (<Notification key={info.id} text={info.content}/>)
+        return (<Notification key={info.uuid} text={info.content}/>)
       } 
     })
     return (
