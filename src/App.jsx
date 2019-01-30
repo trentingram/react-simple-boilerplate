@@ -71,7 +71,10 @@ class App extends Component {
     } else
 
     if(parsedPayload.type === 'client'){
-      this.setState({userNumber: parsedPayload.clients})
+      this.setState({
+                    userNumber: parsedPayload.clients,
+                    currentUser: {...this.state.currentUser, color: parsedPayload.color}
+                    })
     } else
 
     if(parsedPayload.type === 'incomingNotice') {
