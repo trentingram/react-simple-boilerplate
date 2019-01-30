@@ -33,8 +33,10 @@ class App extends Component {
     }
 
   componentDidMount() {
+
     this.socket.onmessage = this.onMessage;
-    this.socket.onopen = () => {
+
+    this.socket.onopen = (ws) => {
     console.log('Connected to server.');
     }
     
@@ -61,9 +63,8 @@ class App extends Component {
   }
 
   onMessage = (payload) => {
-
-    let parsedPayload = JSON.parse(payload.data)
     
+    let parsedPayload = JSON.parse(payload.data)
     if(parsedPayload.type === 'incomingMessage'){
       
       let concatMessage = this.state.messages.concat(parsedPayload)
@@ -71,10 +72,7 @@ class App extends Component {
     } else
 
     if(parsedPayload.type === 'client'){
-      this.setState({
-                    userNumber: parsedPayload.clients,
-                    currentUser: {...this.state.currentUser, color: parsedPayload.color}
-                    })
+      this.setState({userNumber: parsedPayload.clients})
     } else
 
     if(parsedPayload.type === 'incomingNotice') {

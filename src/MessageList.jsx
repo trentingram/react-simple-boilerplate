@@ -6,7 +6,6 @@ const MessageList = ({messages}) => {
   
     const allMessages = messages.map((info) => {
 
-      console.log(info.type)
       if(info.type === 'incomingMessage') {
         return  (<Message key={info.uuid} messageInfo={info} />)
       } else
