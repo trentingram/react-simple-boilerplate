@@ -22,7 +22,24 @@ const wss = new SocketServer({ server });
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 
-const colors = ['#a3fd7f', '#2e4a62', '#00a68c', '#944743', '#C80000', '#FFEB00', '#000000', '#286088']
+const colors = ['#007bff',
+    '#6610f2',
+    '#6f42c1',
+    '#e83e8c',
+    '#dc3545',
+    '#fd7e14',
+    '#ffc107',
+    '#28a745',
+    '#20c997',
+    '#17a2b8',
+    '#6c757d',
+    '#007bff',
+    '#6c757d',
+    '#28a745',
+    '#17a2b8',
+    '#dc3545',
+    '#343a40'
+]
 
 function randomColor() {
     let num = Math.floor(Math.random() * 4);
