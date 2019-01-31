@@ -5,7 +5,9 @@ import MessageList from './MessageList.jsx';
 
 class App extends Component {
 
+  // set up new WebSocket instance
   socket = new WebSocket("ws://localhost:3001");
+
   state = {
 
     userNumber: 1,
@@ -13,10 +15,13 @@ class App extends Component {
     userText: function() {
     return `${this.userNumber} user` + (this.userNumber > 1 ? "s" : "") + " online..."
     },
+
     currentUser: {
       name: "Anonymous"
     },
+
     messages: [
+      // some dummy messages
       // {
       //   type: 'incomingMessage',
       //   username: "Bob",
@@ -34,12 +39,15 @@ class App extends Component {
 
   componentDidMount() {
 
+    // attaches socket onmessage handler to onMessage method of class  
     this.socket.onmessage = this.onMessage;
 
+    // logs when socket opens
     this.socket.onopen = (ws) => {
     console.log('Connected to server.');
     }
     
+    // *** function below is an example of a async data fetch
     // setTimeout(() => {
     //   console.log("Simulating incoming message");
     //   // Add a new message to the list of messages in the data store
@@ -51,6 +59,7 @@ class App extends Component {
     // }, 3000);
   }
 
+  // send message text and user to server for processing
   addMessage = (text, user) => {
     
     const newMessage = {
@@ -58,10 +67,11 @@ class App extends Component {
       username: user,
       content: text
     };
-
     this.socket.send(JSON.stringify(newMessage))
   }
 
+  // handles all incoming messages from server according to type
+  // then updates state
   onMessage = (payload) => {
     
     let parsedPayload = JSON.parse(payload.data)
@@ -83,6 +93,9 @@ class App extends Component {
     }
   }
 
+  // captures current currentUser in state
+  // updates state with new currentUser name
+  // sends message and user to server for processing
   updateUsername = (username) => {
     let oldName = this.state.currentUser.name;
     this.setState({currentUser: { name: username }})
@@ -99,7 +112,7 @@ class App extends Component {
     return (
       <div>
         <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
+          <a href="/" className="navbar-brand">ChatterBox</a>
           <div className="navbar-users">{this.state.userText()}</div>
         </nav>
         <MessageList messages={this.state.messages}/>
